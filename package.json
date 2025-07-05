@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.50.3",
+    "parcel": "^2.15.4"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3"
+  }
+}
