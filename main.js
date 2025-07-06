@@ -10,9 +10,60 @@ const supabase = createClient(
   NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
+// Query seletors
+const listItem = document.querySelector(".container");
+const nameInsertItem = document.querySelector(".form-container");
+
 const testRead = async function () {
-  const { data: test, error } = await supabase.from("test").select("*");
-  console.log(test);
+  try {
+    const { data: test, error } = await supabase.from("test").select("*");
+    return await test;
+  } catch (err) {
+    console.error("Error:", err);
+  }
 };
 
-testRead();
+const testWrite = async function (newName) {
+  try {
+    const { data, error } = await supabase
+      .from("test")
+      .insert([{ name: newName }])
+      .select();
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
+const init = async () => {
+  try {
+    const testData = await testRead();
+
+    let text = "";
+
+    testData.forEach((el) => {
+      text += `<div class="row">
+             <div class="item">${el.id}</div>
+             <div class="item">${el.name}</div>
+           </div>`;
+    });
+
+    listItem.insertAdjacentHTML("beforeend", text);
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
+init();
+
+//Event handlers
+
+nameInsertItem.addEventListener("submit", async function (event) {
+  event.preventDefault(); // Prevent form reload
+
+  const input = nameInsertItem.querySelector("input[name='name']");
+  const newName = input.value;
+
+  await testWrite(newName);
+
+  input.value = "";
+});
